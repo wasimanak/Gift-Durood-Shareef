@@ -1,0 +1,34 @@
+{
+  "rules": {
+    "users": {
+      ".read": true,
+      "$uid": {
+        ".write": true
+      }
+    },
+    "tasbih_info": {
+      ".read": true,
+      ".write": true
+    },
+    "app_config": {
+      ".read": true,
+      ".write": true
+    },
+    "donation_info": {
+      ".read": true,
+      ".write": true
+    },
+    "daily_counts": {
+      ".read": true,
+      "$daily_id": {
+        ".write": true
+      }
+    },
+    "sessions": {
+      ".read": true,
+      "$session_id": {
+        ".write": true
+      }
+    }
+  }
+}

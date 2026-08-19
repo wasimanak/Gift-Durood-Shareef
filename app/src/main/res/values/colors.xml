@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Islamic Emerald Green & Gold Theme -->
+    <color name="islamic_green_primary">#0F5257</color>
+    <color name="islamic_green_dark">#0B3C40</color>
+    <color name="islamic_green_light">#1B6A70</color>
+    <color name="islamic_mint_light">#EAF4F4</color>
+    <color name="islamic_mint">#CBE3DB</color>
+    <color name="islamic_gold">#D4AF37</color>
+    <color name="islamic_gold_light">#F5E6AD</color>
+
+    <!-- UI Standard Palette -->
+    <color name="bg_light">#F8F9FA</color>
+    <color name="card_light">#FFFFFF</color>
+    <color name="text_primary_light">#1A252C</color>
+    <color name="text_secondary_light">#5C6B73</color>
+
+    <!-- Dark Mode Palette -->
+    <color name="bg_dark">#101E1F</color>
+    <color name="card_dark">#1B2D2F</color>
+    <color name="text_primary_dark">#E8F1F2</color>
+    <color name="text_secondary_dark">#9FA8A9</color>
+    <color name="islamic_green_primary_dark">#19727B</color>
+
+    <color name="divider_color">#E2E8F0</color>
+    <color name="chip_bg_guest">#FEE2E2</color>
+    <color name="chip_text_guest">#991B1B</color>
+    <color name="chip_bg_registered">#DCFCE7</color>
+    <color name="chip_text_registered">#166534</color>
+</resources>

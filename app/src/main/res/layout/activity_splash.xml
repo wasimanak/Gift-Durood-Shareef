@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/islamic_green_primary">
+
+    <!-- Low Opacity Islamic Background Pattern -->
+    <ImageView
+        android:id="@+id/ivSplashBgPattern"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.12"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_splash"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Center Content (Logo + Alhamdulillah) -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivSplashLogo"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/logo_durood" />
+
+        <TextView
+            android:id="@+id/tvSplashTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ"
+            android:textColor="@color/islamic_gold"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:visibility="gone"
+            android:text="Durood &amp; Tasbih Counter"
+            android:textColor="@color/islamic_mint_light"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Bottom Footer (Developed by PKSofter) -->
+    <TextView
+        android:id="@+id/tvDeveloperFooter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Developed by PKSofter"
+        android:textColor="@color/islamic_gold_light"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

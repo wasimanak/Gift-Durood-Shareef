@@ -1,0 +1,43 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <group>
+        <!-- Tile 1 Center Star -->
+        <path
+            android:fillColor="#EAF4F4"
+            android:pathData="M100,20 L108,45 L135,45 L113,60 L122,85 L100,70 L78,85 L87,60 L65,45 L92,45 Z" />
+
+        <!-- Corner Geometric Lines Pattern -->
+        <path
+            android:fillColor="#00000000"
+            android:strokeColor="#D4AF37"
+            android:strokeWidth="1.5"
+            android:pathData="M100,0 L200,100 L100,200 L0,100 Z" />
+
+        <path
+            android:fillColor="#00000000"
+            android:strokeColor="#EAF4F4"
+            android:strokeWidth="1"
+            android:pathData="M50,0 L200,150 M0,50 L150,200 M150,0 L0,150 M200,50 L50,200" />
+
+        <!-- Secondary Stars -->
+        <path
+            android:fillColor="#D4AF37"
+            android:pathData="M20,20 L24,32 L36,32 L26,40 L30,52 L20,44 L10,52 L14,40 L4,32 L16,32 Z" />
+
+        <path
+            android:fillColor="#D4AF37"
+            android:pathData="M180,20 L184,32 L196,32 L186,40 L190,52 L180,44 L170,52 L174,40 L164,32 L176,32 Z" />
+
+        <path
+            android:fillColor="#D4AF37"
+            android:pathData="M20,180 L24,192 L36,192 L26,200 L30,212 L20,204 L10,212 L14,200 L4,192 L16,192 Z" />
+
+        <path
+            android:fillColor="#D4AF37"
+            android:pathData="M180,180 L184,192 L196,192 L186,200 L190,212 L180,204 L170,212 L174,200 L164,192 L176,192 Z" />
+    </group>
+</vector>

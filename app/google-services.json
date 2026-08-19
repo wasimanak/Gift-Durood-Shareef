@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "677316894562",
+    "project_id": "durood-counter-1681e",
+    "storage_bucket": "durood-counter-1681e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677316894562:android:1eb5cf6dba376a321e163b",
+        "android_client_info": {
+          "package_name": "com.alpha4technologies.duroodcounter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGvRDNB_HkWYb4FuTdlXp_rtEfu18VNuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

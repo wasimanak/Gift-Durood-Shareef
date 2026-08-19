@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">Durood Counter</string>
+    <string name="welcome_title">Durood Counter</string>
+    <string name="welcome_subtitle">Recite and track your Durood Pak &amp; Tasbih daily with love and devotion.</string>
+    <string name="btn_start">Start (Enter Name &amp; City)</string>
+    <string name="btn_skip_guest">Skip (Continue as Guest)</string>
+
+    <!-- Dialog / Auth -->
+    <string name="dialog_auth_title">Enter Profile Details</string>
+    <string name="dialog_auth_subtitle">Enter your Full Name and City to log in or create a profile.</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_city">City</string>
+    <string name="hint_country">Country (Optional)</string>
+    <string name="btn_continue">Continue</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_register_now">Register Profile</string>
+
+    <!-- Counter Screen -->
+    <string name="tasbih_name_default">Tasbih: Alhamdulillah</string>
+    <string name="tasbih_subname">Recite Durood Shareef</string>
+    <string name="label_session_count">Session Count</string>
+    <string name="label_today_count">Today\'s Count</string>
+    <string name="label_total_count">Total Durood Count</string>
+    <string name="tap_to_count">TAP</string>
+    <string name="reset_session">Reset Session</string>
+
+    <!-- History / Leaderboard -->
+    <string name="title_history">Community Leaderboard</string>
+    <string name="search_hint">Search user by name or city…</string>
+    <string name="label_global_today">Global Today</string>
+    <string name="label_global_total">Global Total</string>
+    <string name="guest_badge">Guest</string>
+    <string name="registered_badge">Registered</string>
+    <string name="no_users_found">No users match your search query.</string>
+    <string name="rank_format">#%1$d</string>
+
+    <!-- Tabs -->
+    <string name="tab_counter">Counter</string>
+    <string name="tab_history">History</string>
+</resources>
