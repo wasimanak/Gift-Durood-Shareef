@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.google.com/2005/gml/b" xmlns:data="http://www.google.com/2005/gml/data" xmlns:expr="http://www.google.com/2005/gml/expr">
+<head>
+    <meta charset="UTF-8" />
+    <!-- 100% Fixed Zoom & Professional Full-Bleed Viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Gift Durood Shareef - Mobile App View</title>
+    <!-- Roza-e-Rasool (ﷺ) Green Dome Base64 Favicon (Strict Blogger XML Compliant) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJz48Y2lyY2xlIGN4PSc1MCcgY3k9JzUwJyByPSc1MCcgZmlsbD0nIzA2NGUzYicvPjxwYXRoIGQ9J001MCAxOCBDMzIgMTggMjQgMzggMjQgNTUgTDc2IDU1IEM3NiAzOCA6OCAxOCA1MCAxOCBaJyBmaWxsPScjMTBiOTgxJy8+PHBhdGggZD0nTTUwIDEwIEw1MCAyMCcgc3Ryb2tlPScjZDRhZjM3JyBzdHJva2Utd2lkdGg9JzQnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjxjaXJjbGUgY3g9JzUwJyBjeT0nOCcgcj0nMycgZmlsbD0nIzBkNGFmMzcnLz48cmVjdCB4PScyMCcgeT0nNTUnIHdpZHRoPSc6MCcgaGVpZ2h0PScyOCcgZmlsbD0nIzA0Nzg1Nycgcng9JzQnLz48cmVjdCB4PSc0NCcgeT0nNjUnIHdpZHRoPScxMicgaGVpZ2h0PScxOCcgZmlsbD0nIzBkNGFmMzcnIHJ4PSc2Jy8+PC9zdmc+" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Amiri:wght@700&amp;display=swap" rel="stylesheet" />
+    
+    <b:skin><![CDATA[
+        /* Blogger Skin Reset */
+        body { margin: 0; padding: 0; }
+    ]]></b:skin>
+
+    <style>
+        :root {
+            --primary: #064e3b;
+            --primary-light: #047857;
+            --secondary: #10b981;
+            --gold: #d4af37;
+            --gold-light: #fef08a;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-width: 100%;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Professional Mobile App Shell Container (100% Zoom, No Side Margins on Mobile) */
+        .mobile-app-container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            min-height: 100vh;
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        /* Header */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: var(--gold-light);
+        }
+
+        .btn-nav-download {
+            background: var(--gold);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-nav-download:hover {
+            background: #e6c244;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #022c22 100%);
+            color: white;
+            padding: 35px 20px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .arabic-blessing {
+            font-family: 'Amiri', serif;
+            font-size: 24px;
+            color: var(--gold-light);
+            margin-bottom: 8px;
+        }
+
+        .hero-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 12px;
+            line-height: 1.3;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-title span {
+            color: var(--gold-light);
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            color: #d1fae5;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .btn-hero {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--gold);
+            color: var(--primary);
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            width: 100%;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .btn-hero:hover {
+            background: #e6c244;
+            transform: translateY(-2px);
+        }
+
+        /* Phone Screen Preview Container */
+        .screenshot-box {
+            background: #0f172a;
+            border-radius: 24px;
+            padding: 8px;
+            margin: 25px 0 0;
+            border: 2px solid #334155;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .phone-img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-radius: 18px;
+            display: block;
+        }
+
+        /* Fallback Phone UI Preview */
+        .phone-ui-preview {
+            padding: 20px 12px;
+            color: white;
+            text-align: center;
+            background: var(--primary);
+            border-radius: 18px;
+        }
+
+        .ui-card-header {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .ui-tasbih-name {
+            color: var(--gold-light);
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .ui-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .ui-stat-box {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 8px 4px;
+            font-size: 10px;
+        }
+
+        .ui-stat-num {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gold-light);
+            margin-top: 2px;
+        }
+
+        .ui-tap-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--gold) 0%, #b49020 100%);
+            margin: 15px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .ui-tap-count {
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* 1 Million Durood Campaign Card */
+        .campaign-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            padding: 25px 20px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .campaign-badge {
+            display: inline-block;
+            background: var(--gold);
+            color: var(--primary);
+            font-weight: 800;
+            padding: 4px 14px;
+            border-radius: 14px;
+            font-size: 12px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .campaign-title {
+            font-size: 22px;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .campaign-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Live Counter Display */
+        .live-counter-box {
+            background: var(--primary);
+            color: white;
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: block;
+            margin-bottom: 18px;
+            box-shadow: 0 6px 18px rgba(6, 78, 59, 0.2);
+            border: 1px solid var(--gold);
+        }
+
+        .live-counter-label {
+            font-size: 11px;
+            color: #a7f3d0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .live-counter-num {
+            font-size: 34px;
+            font-weight: 800;
+            color: var(--gold-light);
+            margin-top: 2px;
+        }
+
+        .counter-progress-bar {
+            height: 16px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .counter-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--gold));
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
+
+        .live-status-text {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 13px;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 30px 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feature-item {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .feature-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2px;
+        }
+
+        .feature-desc {
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* Download Section */
+        .download-card {
+            background: linear-gradient(135deg, var(--primary) 0%, #022c22 100%);
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+            margin: 10px 20px 30px;
+            border-radius: 24px;
+        }
+
+        .download-title {
+            font-size: 22px;
+            color: var(--gold-light);
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .download-desc {
+            font-size: 13px;
+            color: #d1fae5;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background: #022c22;
+            color: #94a3b8;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        footer strong {
+            color: var(--gold);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Professional Mobile App Container (100% Zoom & Zero Side Margins) -->
+    <div class="mobile-app-container">
+
+        <!-- Header -->
+        <header>
+            <div class="nav-wrapper">
+                <a href="#" class="logo">
+                    <div class="logo-icon">🕌</div>
+                    <div class="logo-text">Gift <span>Durood</span></div>
+                </a>
+                <a href="https://www.mediafire.com/file/px2wnralb4tvipn/Durood_Shareef.apk/file" class="btn-nav-download" download="download">APK Download</a>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="arabic-blessing">صلّى الله عليه وآله وسلّم</div>
+            <h1 class="hero-title">Gift <span>Durood Shareef</span></h1>
+            <p class="hero-subtitle">
+                Join believers globally in offering a collective gift of <strong>1 Million (1M) Durood Shareef</strong> to Prophet Muhammad (ﷺ).
+            </p>
+            
+            <a href="https://www.mediafire.com/file/px2wnralb4tvipn/Durood_Shareef.apk/file" class="btn-hero" download="download">
+                <span>📲 Download App Now</span>
+            </a>
+
+            <!-- Screenshot Preview -->
+            <div class="screenshot-box">
+                <img src="https://raw.githubusercontent.com/android/architecture-samples/main/screenshots/task_detail.png" 
+                     alt="Gift Durood App Screenshot" 
+                     class="phone-img" 
+                     onerror="this.style.display='none'; document.getElementById('fallbackUi').style.display='block';" />
+                
+                <!-- Fallback Phone UI Preview -->
+                <div id="fallbackUi" class="phone-ui-preview" style="display: none;">
+                    <div class="ui-card-header">
+                        <div style="font-size: 11px; color: #a7f3d0;">Assalamu Alaikum!</div>
+                        <div class="ui-tasbih-name">Alhamdulillah</div>
+                    </div>
+                    <div class="ui-stats-grid">
+                        <div class="ui-stat-box">Session<div class="ui-stat-num">120</div></div>
+                        <div class="ui-stat-box">Today<div class="ui-stat-num">1,250</div></div>
+                        <div class="ui-stat-box">Total<div class="ui-stat-num">45,800</div></div>
+                    </div>
+                    <div class="ui-tap-circle">
+                        <div class="ui-tap-count">1,250</div>
+                        <div style="font-size: 10px; color: #064e3b; font-weight: bold;">Tap to Count</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1 Million Durood Campaign Card (Live Firebase Data) -->
+        <section class="campaign-card">
+            <span class="campaign-badge">🌟 Live Global Campaign</span>
+            <h2 class="campaign-title">1 Million (1M) Goal</h2>
+            <p class="campaign-desc">
+                Every tap on the app updates live in real-time right here on this global scoreboard!
+            </p>
+            
+            <!-- Live Firebase Total Display -->
+            <div class="live-counter-box">
+                <div class="live-counter-label">Live Community Total</div>
+                <div class="live-counter-num" id="liveTotalCount">0</div>
+            </div>
+
+            <div class="counter-progress-bar">
+                <div id="liveProgressBar" class="counter-progress-fill"></div>
+            </div>
+            <div class="live-status-text" id="liveProgressText">Loading live Firebase recitations...</div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">App Features</h2>
+            <p class="section-subtitle">Designed for an effortless &amp; spiritual experience</p>
+
+            <div class="features-list">
+                <div class="feature-item">
+                    <div class="feature-icon">📿</div>
+                    <div>
+                        <h3 class="feature-title">Full-Screen Tap Counter</h3>
+                        <p class="feature-desc">Tap anywhere on the screen with haptic vibration feedback.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">☁️</div>
+                    <div>
+                        <h3 class="feature-title">Firebase Realtime Sync</h3>
+                        <p class="feature-desc">Automated batch syncing keeps your counts updated in real-time.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🏆</div>
+                    <div>
+                        <h3 class="feature-title">Community Leaderboard</h3>
+                        <p class="feature-desc">View global standings and search reciters by name &amp; city.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">📴</div>
+                    <div>
+                        <h3 class="feature-title">Offline Support</h3>
+                        <p class="feature-desc">Recite anytime offline; counts automatically sync when reconnected.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">👤</div>
+                    <div>
+                        <h3 class="feature-title">Auto-Login &amp; Guest Mode</h3>
+                        <p class="feature-desc">Automatic seamless auto-login plus instant Guest access.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section class="download-card">
+            <h2 class="download-title">Join The Campaign</h2>
+            <p class="download-desc">Download the app and contribute to 1 Million Durood Shareef.</p>
+            <a href="https://www.mediafire.com/file/px2wnralb4tvipn/Durood_Shareef.apk/file" class="btn-hero" download="download">
+                <span>⬇️ Download Free APK</span>
+            </a>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Developed with ❤️ by <strong>PKSofter</strong> | Gift Durood &#169; 2026</p>
+        </footer>
+
+    </div>
+
+    <!-- Mandatory Hidden Blogger Section Tag -->
+    <div style="display:none;">
+        <b:section id="main" class="main" showaddelement="no"></b:section>
+    </div>
+
+    <!-- Firebase Realtime Database Live Listener (Wrapped in Blogger CDATA) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGvRDNB_HkWYb4FuTdlXp_rtEfu18VNuc",
+            projectId: "durood-counter-1681e",
+            databaseURL: "https://durood-counter-1681e-default-rtdb.firebaseio.com"
+        };
+
+        const GOAL = 1000000;
+
+        try {
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.database();
+
+            db.ref("users").on("value", (snapshot) => {
+                let totalDurood = 0;
+                if (snapshot.exists()) {
+                    snapshot.forEach((child) => {
+                        const user = child.val();
+                        if (user && user.totalCount) {
+                            totalDurood += Number(user.totalCount) || 0;
+                        }
+                    });
+                }
+                updateCampaignCounter(totalDurood);
+            }, (error) => {
+                console.warn("RTDB SDK listener fallback to REST endpoint:", error);
+                fetchRestFallback();
+            });
+        } catch (err) {
+            console.warn("Firebase Init error, falling back to REST API:", err);
+            fetchRestFallback();
+        }
+
+        function updateCampaignCounter(total) {
+            const formattedTotal = total.toLocaleString("en-US");
+            const liveTotalElem = document.getElementById("liveTotalCount");
+            if (liveTotalElem) liveTotalElem.innerText = formattedTotal;
+
+            const percentage = Math.min(100, (total / GOAL) * 100).toFixed(1);
+            const progressBar = document.getElementById("liveProgressBar");
+            if (progressBar) progressBar.style.width = percentage + "%";
+
+            const progressText = document.getElementById("liveProgressText");
+            if (progressText) {
+                progressText.innerText = `${formattedTotal} / 1,000,000 (${percentage}%)`;
+            }
+        }
+
+        function fetchRestFallback() {
+            fetch("https://durood-counter-1681e-default-rtdb.firebaseio.com/users.json")
+                .then(res => res.json())
+                .then(data => {
+                    let total = 0;
+                    if (data) {
+                        Object.values(data).forEach(u => {
+                            if (u && u.totalCount) total += Number(u.totalCount) || 0;
+                        });
+                    }
+                    updateCampaignCounter(total);
+                })
+                .catch(e => {
+                    console.error("REST fetch error:", e);
+                    updateCampaignCounter(0);
+                });
+        }
+    //]]>
+    </script>
+</body>
+</html>
