@@ -20,7 +20,7 @@
     <string name="tasbih_subname">Recite Durood Shareef</string>
     <string name="label_session_count">Session Count</string>
     <string name="label_today_count">Today\'s Count</string>
-    <string name="label_total_count">Total Durood Count</string>
+    <string name="label_total_count">Total Count</string>
     <string name="tap_to_count">TAP</string>
     <string name="reset_session">Reset Session</string>
 
