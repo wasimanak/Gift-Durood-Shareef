@@ -37,4 +37,15 @@
     <!-- Tabs -->
     <string name="tab_counter">Counter</string>
     <string name="tab_history">History</string>
+    <string name="tab_about">About Us</string>
+
+    <!-- About Us Screen -->
+    <string name="title_about">About Durood Counter</string>
+    <string name="about_dev_credit">Developed with ❤️ by PKSofter</string>
+    <string name="about_tagline">Empowering believers worldwide to recite and track daily Durood Pak &amp; Tasbih.</string>
+    <string name="btn_privacy_policy">Privacy Policy</string>
+    <string name="title_social_connect">Connect &amp; Follow Us</string>
+    <string name="btn_whatsapp">WhatsApp Support</string>
+    <string name="btn_instagram">Instagram</string>
+    <string name="btn_facebook">Facebook</string>
 </resources>

@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private CountSyncManager syncManager;
     private final Fragment counterFragment = new CounterFragment();
     private final Fragment historyFragment = new HistoryFragment();
+    private final Fragment aboutFragment = new AboutFragment();
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private Fragment activeFragment = counterFragment;
 
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         syncManager = new CountSyncManager(this);
 
         fragmentManager.beginTransaction()
+                .add(R.id.fragmentContainer, aboutFragment, "3").hide(aboutFragment)
                 .add(R.id.fragmentContainer, historyFragment, "2").hide(historyFragment)
                 .add(R.id.fragmentContainer, counterFragment, "1")
                 .commit();
@@ -45,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.navigation_history) {
                 fragmentManager.beginTransaction().hide(activeFragment).show(historyFragment).commit();
                 activeFragment = historyFragment;
+                return true;
+            } else if (itemId == R.id.navigation_about) {
+                fragmentManager.beginTransaction().hide(activeFragment).show(aboutFragment).commit();
+                activeFragment = aboutFragment;
                 return true;
             }
             return false;
