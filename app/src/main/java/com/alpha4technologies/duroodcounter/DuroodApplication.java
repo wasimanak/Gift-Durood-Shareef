@@ -5,10 +5,14 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 public class DuroodApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        // Force Light (Day) Mode system-wide and disable Night Theme
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         applyStandardFontScale(this);
     }
 
