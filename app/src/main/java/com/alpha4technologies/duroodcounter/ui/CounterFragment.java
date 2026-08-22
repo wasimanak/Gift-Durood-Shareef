@@ -56,7 +56,6 @@ public class CounterFragment extends Fragment {
         binding.rootCounterLayout.setOnClickListener(v -> handleTap());
         binding.scrollViewCounter.setOnClickListener(v -> handleTap());
         binding.flTapButtonContainer.setOnClickListener(v -> handleTap());
-        binding.btnResetSession.setOnClickListener(v -> counterViewModel.resetSessionCount());
         binding.btnRegisterGuest.setOnClickListener(v -> showRegisterProfileDialog());
         binding.btnSupportUs.setOnClickListener(v -> {
             if (currentDonationInfo != null) {
@@ -99,15 +98,10 @@ public class CounterFragment extends Fragment {
             }
         });
 
-        counterViewModel.getSessionCount().observe(getViewLifecycleOwner(), count -> {
-            long val = count != null ? count : 0L;
-            binding.tvSessionCount.setText(formatter.format(val));
-            binding.tvTapDisplay.setText(formatter.format(val));
-        });
-
         counterViewModel.getTodayCount().observe(getViewLifecycleOwner(), count -> {
             long val = count != null ? count : 0L;
             binding.tvTodayCount.setText(formatter.format(val));
+            binding.tvTapDisplay.setText(formatter.format(val));
         });
 
         counterViewModel.getTotalCount().observe(getViewLifecycleOwner(), count -> {

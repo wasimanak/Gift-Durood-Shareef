@@ -51,14 +51,21 @@ public class AppUpdateInfo {
         long latestCode = updateInfo.getLatestVersionCode();
         String latestName = updateInfo.getLatestVersionName();
 
-        // 1. Check version code first
+        // 1. Check if force update is enabled in database
+        if (updateInfo.isForceUpdate()) {
+            return true;
+        }
+
+        // 2. Check version code
         if (latestCode > currentVersionCode) {
             return true;
         }
 
-        // 2. If version code is same or less, check semantic version name if available
-        if (latestCode == currentVersionCode && latestName != null && !latestName.trim().isEmpty()) {
-            return isVersionNameHigher(latestName.trim(), currentVersionName);
+        // 3. Check version name
+        if (latestName != null && !latestName.trim().isEmpty()) {
+            if (isVersionNameHigher(latestName.trim(), currentVersionName)) {
+                return true;
+            }
         }
 
         return false;

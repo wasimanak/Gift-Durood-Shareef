@@ -8,6 +8,7 @@ import com.alpha4technologies.duroodcounter.model.User;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 public class PreferencesManager {
     private static final String PREF_NAME = "durood_counter_prefs";
@@ -23,6 +24,7 @@ public class PreferencesManager {
     private static final String KEY_PENDING_SYNC = "pending_sync_count";
     private static final String KEY_LAST_DATE = "last_date";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
+    private static final String KEY_ACTIVE_SESSION_ID = "active_session_id";
 
     private final SharedPreferences prefs;
 
@@ -34,7 +36,7 @@ public class PreferencesManager {
     public String getOrCreateDeviceId() {
         String id = prefs.getString("device_uid", null);
         if (id == null) {
-            id = "user_" + java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 12);
+            id = "user_" + UUID.randomUUID().toString().replace("-", "").substring(0, 12);
             prefs.edit().putString("device_uid", id).apply();
         }
         return id;
@@ -54,6 +56,24 @@ public class PreferencesManager {
                     .putLong(KEY_TODAY_COUNT, 0)
                     .apply();
         }
+    }
+
+    public String getActiveSessionId() {
+        String sessionId = prefs.getString(KEY_ACTIVE_SESSION_ID, null);
+        if (sessionId == null || sessionId.isEmpty()) {
+            sessionId = "session_" + UUID.randomUUID().toString().replace("-", "");
+            prefs.edit().putString(KEY_ACTIVE_SESSION_ID, sessionId).apply();
+        }
+        return sessionId;
+    }
+
+    public String startNewSession() {
+        String newSessionId = "session_" + UUID.randomUUID().toString().replace("-", "");
+        prefs.edit()
+                .putString(KEY_ACTIVE_SESSION_ID, newSessionId)
+                .putLong(KEY_SESSION_COUNT, 0)
+                .apply();
+        return newSessionId;
     }
 
     public void saveUser(User user) {
@@ -132,7 +152,7 @@ public class PreferencesManager {
     }
 
     public void resetSessionCount() {
-        prefs.edit().putLong(KEY_SESSION_COUNT, 0).apply();
+        startNewSession();
     }
 
     public void updateRemoteSyncedTotals(long remoteTotal, long remoteToday) {

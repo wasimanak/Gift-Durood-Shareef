@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        syncManager = new CountSyncManager(this);
+        syncManager = CountSyncManager.getInstance(this);
 
         fragmentManager.beginTransaction()
                 .add(R.id.fragmentContainer, aboutFragment, "3").hide(aboutFragment)
@@ -58,9 +58,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (syncManager != null) {
+            syncManager.flushSync();
+        }
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         // Flush unsynced counts when activity stops or goes to background
+        if (syncManager != null) {
+            syncManager.flushSync();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Flush unsynced counts when app exits or activity is destroyed
         if (syncManager != null) {
             syncManager.flushSync();
         }

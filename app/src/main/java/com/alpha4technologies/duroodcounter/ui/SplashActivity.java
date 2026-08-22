@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,8 +24,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
+    private static final String TAG = "SplashActivity";
     private static final int SPLASH_DELAY_MS = 2000;
-    private static final int NETWORK_TIMEOUT_MS = 3500;
+    private static final int NETWORK_TIMEOUT_MS = 6000;
 
     private ActivitySplashBinding binding;
     private PreferencesManager prefsManager;
@@ -53,16 +55,21 @@ public class SplashActivity extends AppCompatActivity {
     private void checkVersionAndUpdate() {
         if (!isNetworkAvailable(this)) {
             // Offline fallback: Internet not available, do not block user! Proceed directly after splash delay.
+            Log.d(TAG, "Offline mode detected. Proceeding to main app.");
             new Handler(Looper.getMainLooper()).postDelayed(this::routeNextScreen, SPLASH_DELAY_MS);
             return;
         }
 
-        // Network timeout fallback: If connection is poor and Firebase takes > 3.5s, proceed to app!
+        // Network timeout fallback: If connection is poor and Firebase takes > 6s, proceed to app!
         Handler timeoutHandler = new Handler(Looper.getMainLooper());
-        Runnable timeoutRunnable = this::routeNextScreen;
+        Runnable timeoutRunnable = () -> {
+            Log.w(TAG, "Version check timed out. Proceeding to next screen.");
+            routeNextScreen();
+        };
         timeoutHandler.postDelayed(timeoutRunnable, NETWORK_TIMEOUT_MS);
 
         repository.checkAppUpdate((updateRequired, updateInfo) -> {
+            // Cancel timeout as soon as Firebase responds!
             timeoutHandler.removeCallbacks(timeoutRunnable);
 
             if (isFinishing() || isDestroyed() || routed) return;
@@ -71,8 +78,10 @@ public class SplashActivity extends AppCompatActivity {
             long remainingDelay = Math.max(0, SPLASH_DELAY_MS - elapsed);
 
             if (updateRequired && updateInfo != null) {
+                Log.d(TAG, "App update required! Showing update dialog immediately...");
                 showUpdateDialog(updateInfo);
             } else {
+                Log.d(TAG, "App is up to date. Proceeding to next screen.");
                 new Handler(Looper.getMainLooper()).postDelayed(this::routeNextScreen, remainingDelay);
             }
         });
@@ -95,11 +104,13 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void showUpdateDialog(AppUpdateInfo updateInfo) {
+        if (isFinishing() || isDestroyed()) return;
+
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle(updateInfo.getUpdateTitle() != null && !updateInfo.getUpdateTitle().trim().isEmpty()
                 ? updateInfo.getUpdateTitle().trim() : "Update Available");
         builder.setMessage(updateInfo.getUpdateMessage() != null && !updateInfo.getUpdateMessage().trim().isEmpty()
-                ? updateInfo.getUpdateMessage().trim() : "A new version of Durood Counter is available. Please update to continue.");
+                ? updateInfo.getUpdateMessage().trim() : "A new version of Durood Counter is available. Please update for the best experience.");
 
         builder.setPositiveButton("Update Now", (dialog, which) -> {
             String url = updateInfo.getUpdateUrl() != null && !updateInfo.getUpdateUrl().trim().isEmpty()

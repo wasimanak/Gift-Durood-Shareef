@@ -87,7 +87,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Statistics Section (3 Metric Cards with Auto-Sizing text) -->
+        <!-- Statistics Section (2 Metric Cards: Today & Total) -->
         <LinearLayout
             android:id="@+id/llStatsContainer"
             android:layout_width="0dp"
@@ -99,7 +99,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardTasbihHeader">
 
-            <!-- Session Count Card -->
+            <!-- Today's Count Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -114,71 +114,28 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="14dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_session_count"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="11sp" />
-
-                    <TextView
-                        android:id="@+id/tvSessionCount"
-                        android:layout_width="match_parent"
-                        android:layout_height="32dp"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:text="0"
-                        android:textColor="?attr/colorPrimary"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        app:autoSizeMaxTextSize="22sp"
-                        app:autoSizeMinTextSize="10sp"
-                        app:autoSizeStepGranularity="1sp"
-                        app:autoSizeTextType="uniform" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Today's Count Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"
-                android:layout_weight="1"
-                app:cardBackgroundColor="?attr/colorPrimaryContainer"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_today_count"
                         android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="11sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/tvTodayCount"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="36dp"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
                         android:maxLines="1"
                         android:text="0"
                         android:textColor="?attr/colorPrimary"
-                        android:textSize="22sp"
+                        android:textSize="24sp"
                         android:textStyle="bold"
-                        app:autoSizeMaxTextSize="22sp"
-                        app:autoSizeMinTextSize="10sp"
+                        app:autoSizeMaxTextSize="24sp"
+                        app:autoSizeMinTextSize="12sp"
                         app:autoSizeStepGranularity="1sp"
                         app:autoSizeTextType="uniform" />
                 </LinearLayout>
@@ -199,28 +156,28 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_total_count"
                         android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="11sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/tvTotalCount"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="36dp"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
                         android:maxLines="1"
                         android:text="0"
                         android:textColor="@color/islamic_gold"
-                        android:textSize="22sp"
+                        android:textSize="24sp"
                         android:textStyle="bold"
-                        app:autoSizeMaxTextSize="22sp"
-                        app:autoSizeMinTextSize="10sp"
+                        app:autoSizeMaxTextSize="24sp"
+                        app:autoSizeMinTextSize="12sp"
                         app:autoSizeStepGranularity="1sp"
                         app:autoSizeTextType="uniform" />
                 </LinearLayout>
@@ -230,8 +187,8 @@
         <!-- Large Tasbih Button Centerpiece with Auto-Sizing Count -->
         <FrameLayout
             android:id="@+id/flTapButtonContainer"
-            android:layout_width="230dp"
-            android:layout_height="230dp"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/bg_tasbih_button"
             android:clickable="true"
@@ -241,7 +198,7 @@
             app:layout_constraintTop_toBottomOf="@id/llStatsContainer">
 
             <LinearLayout
-                android:layout_width="190dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
@@ -250,14 +207,14 @@
                 <TextView
                     android:id="@+id/tvTapDisplay"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="60dp"
                     android:gravity="center"
                     android:maxLines="1"
                     android:text="0"
                     android:textColor="@color/white"
-                    android:textSize="42sp"
+                    android:textSize="44sp"
                     android:textStyle="bold"
-                    app:autoSizeMaxTextSize="42sp"
+                    app:autoSizeMaxTextSize="44sp"
                     app:autoSizeMinTextSize="14sp"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeTextType="uniform" />
@@ -272,19 +229,6 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </FrameLayout>
-
-        <!-- Reset Session Action Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnResetSession"
-            style="@style/Widget.Material3.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="@string/reset_session"
-            android:textColor="?android:attr/textColorSecondary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/flTapButtonContainer" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

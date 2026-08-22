@@ -23,7 +23,7 @@ public class CounterViewModel extends AndroidViewModel {
     public CounterViewModel(@NonNull Application application) {
         super(application);
         prefsManager = new PreferencesManager(application);
-        syncManager = new CountSyncManager(application);
+        syncManager = CountSyncManager.getInstance(application);
         refreshCounts();
     }
 

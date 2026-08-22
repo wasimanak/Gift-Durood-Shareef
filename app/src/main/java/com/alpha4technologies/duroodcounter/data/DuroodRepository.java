@@ -262,13 +262,21 @@ public class DuroodRepository {
     /**
      * Update counts in Firebase using transaction to prevent duplicate writes / race conditions.
      */
-    public void syncCountBatch(String userId, long countToAdd, SyncCallback callback) {
-        if (userId == null || userId.isEmpty() || countToAdd <= 0) {
-            if (callback != null) callback.onError("Invalid userId or count");
+    /**
+     * Update counts in Firebase for a specific unique RecitationSession using RTDB transaction.
+     * Guarantees each session is synced to Firebase only once and updates totalCount and todayCount safely.
+     */
+    public void syncSession(com.alpha4technologies.duroodcounter.model.RecitationSession session, SyncCallback callback) {
+        if (session == null || session.getUserId() == null || session.getUserId().isEmpty() || session.getCount() <= 0) {
+            if (callback != null) callback.onError("Invalid session or count");
             return;
         }
 
-        String todayDate = PreferencesManager.getTodayDateString();
+        String userId = session.getUserId();
+        String sessionId = session.getSessionId();
+        long countToAdd = session.getCount();
+        String sessionDate = session.getDate() != null ? session.getDate() : PreferencesManager.getTodayDateString();
+
         DatabaseReference userRef = mUsersRef.child(userId);
 
         userRef.runTransaction(new Transaction.Handler() {
@@ -277,20 +285,20 @@ public class DuroodRepository {
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                 User user = currentData.getValue(User.class);
                 if (user == null) {
-                    return Transaction.success(currentData);
+                    user = new User(userId, "", "User", "", "", true, 0, 0, sessionDate, System.currentTimeMillis());
                 }
 
                 long currentTotal = user.getTotalCount();
                 long currentToday = user.getTodayCount();
                 String lastDate = user.getLastDate();
 
-                if (!todayDate.equals(lastDate)) {
+                if (!sessionDate.equals(lastDate)) {
                     currentToday = 0;
                 }
 
                 user.setTotalCount(currentTotal + countToAdd);
                 user.setTodayCount(currentToday + countToAdd);
-                user.setLastDate(todayDate);
+                user.setLastDate(sessionDate);
                 user.setLastUpdated(System.currentTimeMillis());
 
                 currentData.setValue(user);
@@ -300,15 +308,12 @@ public class DuroodRepository {
             @Override
             public void onComplete(DatabaseError error, boolean committed, DataSnapshot currentData) {
                 if (error != null) {
-                    Log.e(TAG, "Transaction failed: " + error.getMessage());
+                    Log.e(TAG, "Session sync transaction failed: " + error.getMessage());
                     if (callback != null) callback.onError(error.getMessage());
                 } else if (committed && currentData != null) {
                     User updatedUser = currentData.getValue(User.class);
                     long total = updatedUser != null ? updatedUser.getTotalCount() : 0;
                     long today = updatedUser != null ? updatedUser.getTodayCount() : 0;
-
-                    // Also record daily_counts and sessions
-                    recordDailyAndSessionCount(userId, countToAdd, todayDate);
 
                     if (callback != null) callback.onSuccess(total, today);
                 } else {
@@ -316,37 +321,6 @@ public class DuroodRepository {
                 }
             }
         });
-    }
-
-    private void recordDailyAndSessionCount(String userId, long countToAdd, String todayDate) {
-        String dailyKey = userId + "_" + todayDate;
-        DatabaseReference dailyRef = mDailyCountsRef.child(dailyKey);
-
-        dailyRef.runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                Long currentCount = currentData.child("count").getValue(Long.class);
-                if (currentCount == null) currentCount = 0L;
-                currentData.child("userId").setValue(userId);
-                currentData.child("date").setValue(todayDate);
-                currentData.child("count").setValue(currentCount + countToAdd);
-                currentData.child("lastUpdated").setValue(System.currentTimeMillis());
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError error, boolean committed, DataSnapshot currentData) {}
-        });
-
-        // Record session log
-        String sessionId = UUID.randomUUID().toString();
-        Map<String, Object> sessionMap = new HashMap<>();
-        sessionMap.put("sessionId", sessionId);
-        sessionMap.put("userId", userId);
-        sessionMap.put("count", countToAdd);
-        sessionMap.put("timestamp", System.currentTimeMillis());
-        mSessionsRef.child(sessionId).setValue(sessionMap);
     }
 
     /**
@@ -385,6 +359,57 @@ public class DuroodRepository {
                 Log.e(TAG, "Leaderboard read failed: " + error.getMessage());
             }
         });
+    }
+
+    public void updateLocalUserCounts(String userId, long localTotalCount, long localTodayCount) {
+        if (userId == null || userId.isEmpty()) return;
+
+        List<User> currentList = mAllUsersLiveData.getValue();
+        if (currentList == null) {
+            currentList = new ArrayList<>();
+        } else {
+            currentList = new ArrayList<>(currentList);
+        }
+
+        User foundUser = null;
+        for (User u : currentList) {
+            if (userId.equals(u.getUserId())) {
+                foundUser = u;
+                break;
+            }
+        }
+
+        String todayDate = PreferencesManager.getTodayDateString();
+
+        if (foundUser != null) {
+            long prevTotal = foundUser.getTotalCount();
+            long prevToday = foundUser.getTodayCount();
+
+            long diffTotal = Math.max(0, localTotalCount - prevTotal);
+            long diffToday = Math.max(0, localTodayCount - prevToday);
+
+            foundUser.setTotalCount(localTotalCount);
+            foundUser.setTodayCount(localTodayCount);
+            foundUser.setLastDate(todayDate);
+
+            Long globalOverall = mGlobalOverallTotalLiveData.getValue();
+            Long globalToday = mGlobalTodayTotalLiveData.getValue();
+
+            mGlobalOverallTotalLiveData.setValue((globalOverall != null ? globalOverall : 0L) + diffTotal);
+            mGlobalTodayTotalLiveData.setValue((globalToday != null ? globalToday : 0L) + diffToday);
+        } else {
+            User newUser = new User(userId, "", "You", "", "", false, localTotalCount, localTodayCount, todayDate, System.currentTimeMillis());
+            currentList.add(newUser);
+
+            Long globalOverall = mGlobalOverallTotalLiveData.getValue();
+            Long globalToday = mGlobalTodayTotalLiveData.getValue();
+
+            mGlobalOverallTotalLiveData.setValue((globalOverall != null ? globalOverall : 0L) + localTotalCount);
+            mGlobalTodayTotalLiveData.setValue((globalToday != null ? globalToday : 0L) + localTodayCount);
+        }
+
+        Collections.sort(currentList, (u1, u2) -> Long.compare(u2.getTotalCount(), u1.getTotalCount()));
+        mAllUsersLiveData.setValue(currentList);
     }
 
     public LiveData<List<User>> getAllUsersLiveData() {
@@ -433,49 +458,66 @@ public class DuroodRepository {
     }
 
     public void checkAppUpdate(AppUpdateCallback callback) {
-        mAppConfigRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
-                    AppUpdateInfo defaultConfig = new AppUpdateInfo(
-                            1,
-                            "1.0",
-                            false,
-                            "https://play.google.com/store/apps/details?id=com.alpha4technologies.duroodcounter",
-                            "Update Available",
-                            "A new version of Durood Counter is available. Please update for the best experience."
-                    );
-                    mAppConfigRef.setValue(defaultConfig);
-                    if (callback != null) callback.onCheckCompleted(false, defaultConfig);
-                    return;
-                }
-
-                AppUpdateInfo updateInfo = null;
-                try {
-                    updateInfo = AppUpdateInfo.fromSnapshot(snapshot);
-                } catch (Exception e) {
-                    Log.e(TAG, "Error parsing AppUpdateInfo: " + e.getMessage());
-                }
-
-                if (updateInfo == null) {
-                    if (callback != null) callback.onCheckCompleted(false, null);
-                    return;
-                }
-
-                long currentVersionCode = com.alpha4technologies.duroodcounter.BuildConfig.VERSION_CODE;
-                String currentVersionName = com.alpha4technologies.duroodcounter.BuildConfig.VERSION_NAME;
-
-                boolean updateRequired = AppUpdateInfo.isUpdateRequired(currentVersionCode, currentVersionName, updateInfo);
-
-                if (callback != null) callback.onCheckCompleted(updateRequired, updateInfo);
+        mAppConfigRef.get().addOnCompleteListener(task -> {
+            DataSnapshot snapshot = null;
+            if (task.isSuccessful() && task.getResult() != null) {
+                snapshot = task.getResult();
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "App update check failed: " + error.getMessage());
-                if (callback != null) callback.onCheckCompleted(false, null);
+            if (snapshot == null || !snapshot.exists()) {
+                mAppConfigRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snap) {
+                        processUpdateSnapshot(snap, callback);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        if (callback != null) callback.onCheckCompleted(false, null);
+                    }
+                });
+                return;
             }
+
+            processUpdateSnapshot(snapshot, callback);
         });
+    }
+
+    private void processUpdateSnapshot(DataSnapshot snapshot, AppUpdateCallback callback) {
+        if (snapshot == null || !snapshot.exists()) {
+            AppUpdateInfo defaultConfig = new AppUpdateInfo(
+                    1,
+                    "1.0",
+                    false,
+                    "https://play.google.com/store/apps/details?id=com.alpha4technologies.duroodcounter",
+                    "Update Available",
+                    "A new version of Durood Counter is available. Please update for the best experience."
+            );
+            mAppConfigRef.setValue(defaultConfig);
+            if (callback != null) callback.onCheckCompleted(false, defaultConfig);
+            return;
+        }
+
+        AppUpdateInfo updateInfo = null;
+        try {
+            updateInfo = AppUpdateInfo.fromSnapshot(snapshot);
+        } catch (Exception e) {
+            Log.e(TAG, "Error parsing AppUpdateInfo: " + e.getMessage());
+        }
+
+        if (updateInfo == null) {
+            if (callback != null) callback.onCheckCompleted(false, null);
+            return;
+        }
+
+        long currentVersionCode = com.alpha4technologies.duroodcounter.BuildConfig.VERSION_CODE;
+        String currentVersionName = com.alpha4technologies.duroodcounter.BuildConfig.VERSION_NAME;
+
+        boolean updateRequired = AppUpdateInfo.isUpdateRequired(currentVersionCode, currentVersionName, updateInfo);
+        Log.d(TAG, "App Update Check -> Required: " + updateRequired + ", Force: " + updateInfo.isForceUpdate()
+                + ", LatestCode: " + updateInfo.getLatestVersionCode() + ", CurrentCode: " + currentVersionCode);
+
+        if (callback != null) callback.onCheckCompleted(updateRequired, updateInfo);
     }
 
     public LiveData<DonationInfo> getDonationInfoLiveData() {
