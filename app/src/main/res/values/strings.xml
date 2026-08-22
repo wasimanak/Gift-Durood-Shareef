@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Durood Counter</string>
     <string name="welcome_title">Durood Counter</string>
-    <string name="welcome_subtitle">Recite and track your Durood Pak &amp; Tasbih daily with love and devotion.</string>
+    <string name="welcome_subtitle">Recite and track your Durood Pak daily with love and devotion.</string>
     <string name="btn_start">Start (Enter Name &amp; City)</string>
     <string name="btn_skip_guest">Skip (Continue as Guest)</string>
 
@@ -41,8 +41,8 @@
 
     <!-- About Us Screen -->
     <string name="title_about">About Durood Counter</string>
-    <string name="about_dev_credit">Developed with ❤️ by PKSofter</string>
-    <string name="about_tagline">Empowering believers worldwide to recite and track daily Durood Pak &amp; Tasbih.</string>
+    <string name="about_dev_credit">Developed with ❤️ by Alpha4Technologies</string>
+    <string name="about_tagline">Empowering believers worldwide to recite and track daily Durood Pak.</string>
     <string name="btn_privacy_policy">Privacy Policy</string>
     <string name="title_social_connect">Connect &amp; Follow Us</string>
     <string name="btn_whatsapp">WhatsApp Support</string>

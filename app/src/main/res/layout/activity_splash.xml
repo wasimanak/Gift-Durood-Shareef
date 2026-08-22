@@ -63,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="Developed by PKSofter"
+        android:text="Developed by Alpha4Technologies"
         android:textColor="@color/islamic_gold_light"
         android:textSize="10sp"
         android:textStyle="bold"
