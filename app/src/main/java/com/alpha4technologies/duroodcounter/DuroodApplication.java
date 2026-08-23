@@ -14,6 +14,9 @@ public class DuroodApplication extends Application {
         // Force Light (Day) Mode system-wide and disable Night Theme
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         applyStandardFontScale(this);
+
+        // Schedule 2-hour periodic background sync using WorkManager
+        com.alpha4technologies.duroodcounter.util.DuroodSyncWorker.enqueuePeriodicSync(this);
     }
 
     @Override

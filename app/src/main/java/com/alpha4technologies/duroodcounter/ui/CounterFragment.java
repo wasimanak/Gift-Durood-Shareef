@@ -109,6 +109,23 @@ public class CounterFragment extends Fragment {
             binding.tvTotalCount.setText(formatter.format(val));
         });
 
+        long GOAL_1M = 1000000L;
+        counterViewModel.getGlobalOverallTotal().observe(getViewLifecycleOwner(), total -> {
+            long currentOverall = total != null ? total : 0L;
+            double percentage = Math.min(100.0, ((double) currentOverall / GOAL_1M) * 100.0);
+            long remaining = Math.max(0L, GOAL_1M - currentOverall);
+
+            binding.progressGoal1M.setProgress((int) Math.min(GOAL_1M, currentOverall));
+            binding.tvGoalPercentage.setText(String.format(Locale.US, "%.1f%%", percentage));
+            binding.tvGoalProgressText.setText(formatter.format(currentOverall) + " / " + formatter.format(GOAL_1M));
+
+            if (currentOverall >= GOAL_1M) {
+                binding.tvGoalRemainingText.setText("Goal Achieved! 🎉");
+            } else {
+                binding.tvGoalRemainingText.setText(formatter.format(remaining) + " Remaining");
+            }
+        });
+
         authViewModel.getAuthResultLiveData().observe(getViewLifecycleOwner(), result -> {
             if (result != null && result.status == AuthViewModel.AuthResult.Status.SUCCESS) {
                 counterViewModel.refreshCounts();

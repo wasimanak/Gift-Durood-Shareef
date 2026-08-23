@@ -68,12 +68,22 @@ public class PreferencesManager {
     }
 
     public String startNewSession() {
+        return startNewSessionWithCount(0);
+    }
+
+    public String startNewSessionWithCount(long initialCount) {
         String newSessionId = "session_" + UUID.randomUUID().toString().replace("-", "");
         prefs.edit()
                 .putString(KEY_ACTIVE_SESSION_ID, newSessionId)
-                .putLong(KEY_SESSION_COUNT, 0)
+                .putLong(KEY_SESSION_COUNT, Math.max(0, initialCount))
                 .apply();
         return newSessionId;
+    }
+
+    public void updateActiveSessionCount(long newCount) {
+        prefs.edit()
+                .putLong(KEY_SESSION_COUNT, Math.max(0, newCount))
+                .apply();
     }
 
     public void saveUser(User user) {

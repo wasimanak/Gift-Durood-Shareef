@@ -1,16 +1,24 @@
 package com.alpha4technologies.duroodcounter.ui;
 
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.alpha4technologies.duroodcounter.R;
 import com.alpha4technologies.duroodcounter.data.CountSyncManager;
 import com.alpha4technologies.duroodcounter.databinding.ActivityMainBinding;
+import com.alpha4technologies.duroodcounter.util.DuroodNotificationScheduler;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQ_CODE_POST_NOTIFICATIONS = 2001;
+
     private ActivityMainBinding binding;
     private CountSyncManager syncManager;
     private final Fragment counterFragment = new CounterFragment();
@@ -55,6 +63,26 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        checkNotificationPermissionAndSchedule();
+    }
+
+    private void checkNotificationPermissionAndSchedule() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, REQ_CODE_POST_NOTIFICATIONS);
+                return;
+            }
+        }
+        DuroodNotificationScheduler.scheduleDailyNotifications(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_CODE_POST_NOTIFICATIONS) {
+            DuroodNotificationScheduler.scheduleDailyNotifications(this);
+        }
     }
 
     @Override

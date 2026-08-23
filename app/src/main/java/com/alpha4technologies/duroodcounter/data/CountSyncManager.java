@@ -7,6 +7,8 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,11 +16,16 @@ import androidx.annotation.NonNull;
 import com.alpha4technologies.duroodcounter.model.RecitationSession;
 import com.alpha4technologies.duroodcounter.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CountSyncManager {
     private static final String TAG = "CountSyncManager";
     public static final int BATCH_THRESHOLD = 50;
+
+    public interface OnSyncCompleteListener {
+        void onSyncComplete();
+    }
 
     private static CountSyncManager instance;
 
@@ -33,6 +40,7 @@ public class CountSyncManager {
     private final PreferencesManager prefsManager;
     private final SessionDatabaseHelper dbHelper;
     private final DuroodRepository repository;
+    private final List<OnSyncCompleteListener> syncListeners = new ArrayList<>();
     private boolean isSyncing = false;
     private boolean isNetworkCallbackRegistered = false;
 
@@ -43,6 +51,32 @@ public class CountSyncManager {
         this.repository = DuroodRepository.getInstance();
 
         registerNetworkCallback();
+    }
+
+    public synchronized void addOnSyncCompleteListener(OnSyncCompleteListener listener) {
+        if (listener != null && !syncListeners.contains(listener)) {
+            syncListeners.add(listener);
+        }
+    }
+
+    public synchronized void removeOnSyncCompleteListener(OnSyncCompleteListener listener) {
+        syncListeners.remove(listener);
+    }
+
+    private void notifySyncComplete() {
+        new Handler(Looper.getMainLooper()).post(() -> {
+            List<OnSyncCompleteListener> copy;
+            synchronized (this) {
+                copy = new ArrayList<>(syncListeners);
+            }
+            for (OnSyncCompleteListener listener : copy) {
+                try {
+                    listener.onSyncComplete();
+                } catch (Exception e) {
+                    Log.e(TAG, "SyncListener error", e);
+                }
+            }
+        });
     }
 
     private synchronized void registerNetworkCallback() {
@@ -167,6 +201,7 @@ public class CountSyncManager {
         if (index >= unsyncedList.size()) {
             isSyncing = false;
             Log.d(TAG, "All unsynced sessions processed.");
+            notifySyncComplete();
             return;
         }
 
@@ -184,9 +219,12 @@ public class CountSyncManager {
         // Immediately update syncedCount locally so process exit never re-syncs this delta!
         dbHelper.updateSessionSyncedCount(session.getSessionId(), targetSyncedCount);
 
+        // Unique payload ID for idempotency: ensures each checkpoint sync is executed exactly once by Firebase
+        String uniquePayloadId = session.getSessionId() + "_" + targetSyncedCount;
+
         // Create delta session payload for Firebase transaction
         RecitationSession deltaSessionPayload = new RecitationSession(
-                session.getSessionId(),
+                uniquePayloadId,
                 session.getUserId(),
                 deltaToSync,
                 0,
@@ -198,13 +236,50 @@ public class CountSyncManager {
         repository.syncSession(deltaSessionPayload, new DuroodRepository.SyncCallback() {
             @Override
             public void onSuccess(long updatedTotal, long updatedToday) {
-                prefsManager.updateRemoteSyncedTotals(updatedTotal, updatedToday);
                 Log.d(TAG, "Session delta synced successfully: " + session.getSessionId() + " (delta: " + deltaToSync + ")");
 
-                // If synced session was the active session, start a fresh new active session for subsequent taps
+                User currentUser = prefsManager.getUser();
+                String currentUserId = currentUser != null ? currentUser.getUserId() : "";
+
+                // If synced session was the active session, handle transitioning to new session first so DB state is clean
                 if (session.getSessionId().equals(prefsManager.getActiveSessionId())) {
-                    prefsManager.startNewSession();
+                    RecitationSession currentDbActive = dbHelper.getSession(session.getSessionId());
+                    long remainingTapsInActiveSession = currentDbActive != null ? Math.max(0, currentDbActive.getCount() - targetSyncedCount) : 0;
+
+                    // Mark old active session fully synced in DB at targetSyncedCount
+                    dbHelper.markSessionSynced(session.getSessionId());
+
+                    if (remainingTapsInActiveSession > 0) {
+                        String newActiveSessionId = prefsManager.startNewSessionWithCount(remainingTapsInActiveSession);
+                        RecitationSession newActiveSession = new RecitationSession(
+                                newActiveSessionId,
+                                session.getUserId(),
+                                remainingTapsInActiveSession,
+                                0,
+                                PreferencesManager.getTodayDateString(),
+                                System.currentTimeMillis(),
+                                false
+                        );
+                        dbHelper.insertOrUpdateSession(newActiveSession);
+                    } else {
+                        prefsManager.startNewSession();
+                    }
+                } else {
+                    dbHelper.markSessionSynced(session.getSessionId());
                 }
+
+                // Compute any remaining unsynced counts across all local sessions so in-flight taps are preserved accurately
+                long unsyncedRemainingDelta = 0;
+                if (!currentUserId.isEmpty()) {
+                    List<RecitationSession> remainingSessions = dbHelper.getUnsyncedSessions(currentUserId);
+                    for (RecitationSession rs : remainingSessions) {
+                        unsyncedRemainingDelta += rs.getUnsyncedDelta();
+                    }
+                }
+
+                long correctedTotal = updatedTotal + unsyncedRemainingDelta;
+                long correctedToday = updatedToday + unsyncedRemainingDelta;
+                prefsManager.updateRemoteSyncedTotals(correctedTotal, correctedToday);
 
                 // Proceed to next unsynced session
                 syncNextSession(unsyncedList, index + 1);
@@ -216,6 +291,7 @@ public class CountSyncManager {
                 // Revert syncedCount back if network transaction explicitly fails
                 dbHelper.updateSessionSyncedCount(session.getSessionId(), session.getSyncedCount());
                 isSyncing = false;
+                notifySyncComplete();
             }
         });
     }

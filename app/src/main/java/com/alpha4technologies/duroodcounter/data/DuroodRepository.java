@@ -283,6 +283,12 @@ public class DuroodRepository {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                // Idempotency check: if this specific payload session ID was already processed, do not add count again
+                if (currentData.child("synced_sessions").child(sessionId).getValue() != null) {
+                    Log.d(TAG, "Payload " + sessionId + " already processed in Firebase. Skipping duplicate addition.");
+                    return Transaction.success(currentData);
+                }
+
                 User user = currentData.getValue(User.class);
                 if (user == null) {
                     user = new User(userId, "", "User", "", "", true, 0, 0, sessionDate, System.currentTimeMillis());
@@ -302,6 +308,7 @@ public class DuroodRepository {
                 user.setLastUpdated(System.currentTimeMillis());
 
                 currentData.setValue(user);
+                currentData.child("synced_sessions").child(sessionId).setValue(true);
                 return Transaction.success(currentData);
             }
 

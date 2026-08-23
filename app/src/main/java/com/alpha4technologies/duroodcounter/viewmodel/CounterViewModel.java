@@ -11,7 +11,7 @@ import com.alpha4technologies.duroodcounter.data.CountSyncManager;
 import com.alpha4technologies.duroodcounter.data.PreferencesManager;
 import com.alpha4technologies.duroodcounter.model.User;
 
-public class CounterViewModel extends AndroidViewModel {
+public class CounterViewModel extends AndroidViewModel implements CountSyncManager.OnSyncCompleteListener {
     private final PreferencesManager prefsManager;
     private final CountSyncManager syncManager;
 
@@ -24,7 +24,19 @@ public class CounterViewModel extends AndroidViewModel {
         super(application);
         prefsManager = new PreferencesManager(application);
         syncManager = CountSyncManager.getInstance(application);
+        syncManager.addOnSyncCompleteListener(this);
         refreshCounts();
+    }
+
+    @Override
+    public void onSyncComplete() {
+        refreshCounts();
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        syncManager.removeOnSyncCompleteListener(this);
     }
 
     public void refreshCounts() {
@@ -56,6 +68,10 @@ public class CounterViewModel extends AndroidViewModel {
 
     public LiveData<com.alpha4technologies.duroodcounter.model.DonationInfo> getDonationInfo() {
         return com.alpha4technologies.duroodcounter.data.DuroodRepository.getInstance().getDonationInfoLiveData();
+    }
+
+    public LiveData<Long> getGlobalOverallTotal() {
+        return com.alpha4technologies.duroodcounter.data.DuroodRepository.getInstance().getGlobalOverallTotalLiveData();
     }
 
     public void incrementCount() {
