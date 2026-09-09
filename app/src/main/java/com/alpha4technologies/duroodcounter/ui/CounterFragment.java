@@ -33,6 +33,12 @@ public class CounterFragment extends Fragment {
     private AuthViewModel authViewModel;
     private Vibrator vibrator;
 
+    private CelebrationOverlayView celebrationOverlay;
+
+    // Track which 100k milestone has already been celebrated in this session
+    // e.g. 100000 → celebrated, 200000 → celebrated, etc.
+    private long lastCelebratedMilestone = 0L;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,6 +56,14 @@ public class CounterFragment extends Fragment {
         counterViewModel = new ViewModelProvider(requireActivity()).get(CounterViewModel.class);
         authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
         vibrator = (Vibrator) requireActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
+        celebrationOverlay = binding.celebrationOverlay;
+
+        // Initialize lastCelebratedMilestone to the current total so we don't re-celebrate
+        // already-passed milestones when the fragment is recreated.
+        long currentTotal = counterViewModel.getTotalCount().getValue() != null
+                ? counterViewModel.getTotalCount().getValue() : 0L;
+        lastCelebratedMilestone = (currentTotal / 1_000L) * 1_000L;
 
         observeViewModel();
 
@@ -107,6 +121,15 @@ public class CounterFragment extends Fragment {
         counterViewModel.getTotalCount().observe(getViewLifecycleOwner(), count -> {
             long val = count != null ? count : 0L;
             binding.tvTotalCount.setText(formatter.format(val));
+
+            // Check for every 1,000 milestone
+            if (val > 0) {
+                long currentMilestone = (val / 1_000L) * 1_000L;
+                if (currentMilestone > 0 && currentMilestone > lastCelebratedMilestone) {
+                    lastCelebratedMilestone = currentMilestone;
+                    triggerMilestoneCelebration(currentMilestone);
+                }
+            }
         });
 
         long GOAL_1M = 1000000L;
@@ -183,6 +206,32 @@ public class CounterFragment extends Fragment {
         }
     }
 
+    private void triggerMilestoneCelebration(long milestone) {
+        if (!isAdded() || getContext() == null) return;
+
+        // 1. Show floating hearts/stars for 2 seconds
+        if (celebrationOverlay != null) {
+            celebrationOverlay.startCelebration();
+        }
+
+        // 2. After 2 seconds show the Congratulations dialog
+        binding.getRoot().postDelayed(() -> {
+            if (!isAdded() || getContext() == null) return;
+
+            NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+            String milestoneFormatted = formatter.format(milestone);
+            String message = "You have completed " + milestoneFormatted + " Durood Shareef!\nMay Allah grant you the highest rewards. \uD83C\uDF3F";
+
+            CongratulationsDialog.show(
+                    requireContext(),
+                    "MashaAllah!",
+                    milestoneFormatted + " Durood Complete!",
+                    message,
+                    null
+            );
+        }, 2000);
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -194,6 +243,7 @@ public class CounterFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        celebrationOverlay = null;
         binding = null;
     }
 }

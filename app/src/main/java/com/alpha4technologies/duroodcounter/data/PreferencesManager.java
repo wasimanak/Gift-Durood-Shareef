@@ -94,8 +94,15 @@ public class PreferencesManager {
         editor.putString(KEY_CITY, user.getCity());
         editor.putString(KEY_COUNTRY, user.getCountry());
         editor.putBoolean(KEY_IS_GUEST, user.isGuest());
-        editor.putLong(KEY_TOTAL_COUNT, user.getTotalCount());
-        editor.putLong(KEY_TODAY_COUNT, user.getTodayCount());
+
+        // FIX #3: Never overwrite local totals with a lower Firebase value.
+        // If user was offline for 1-2 days, Firebase may return stale lower counts.
+        // Always keep the higher of the two values to prevent counter reversal.
+        long localTotal = prefs.getLong(KEY_TOTAL_COUNT, 0);
+        long localToday = prefs.getLong(KEY_TODAY_COUNT, 0);
+        editor.putLong(KEY_TOTAL_COUNT, Math.max(localTotal, user.getTotalCount()));
+        editor.putLong(KEY_TODAY_COUNT, Math.max(localToday, user.getTodayCount()));
+
         editor.putString(KEY_LAST_DATE, getTodayDateString());
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.apply();
@@ -166,9 +173,14 @@ public class PreferencesManager {
     }
 
     public void updateRemoteSyncedTotals(long remoteTotal, long remoteToday) {
+        // FIX #1: Only overwrite local counts with remote values if remote is >= local.
+        // After 1-2 days offline, Firebase can return a stale value lower than our local count.
+        // Taking max() ensures we never lose locally accumulated offline counts.
+        long currentLocalTotal = prefs.getLong(KEY_TOTAL_COUNT, 0);
+        long currentLocalToday = prefs.getLong(KEY_TODAY_COUNT, 0);
         prefs.edit()
-                .putLong(KEY_TOTAL_COUNT, remoteTotal)
-                .putLong(KEY_TODAY_COUNT, remoteToday)
+                .putLong(KEY_TOTAL_COUNT, Math.max(currentLocalTotal, remoteTotal))
+                .putLong(KEY_TODAY_COUNT, Math.max(currentLocalToday, remoteToday))
                 .apply();
     }
 }

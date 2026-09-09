@@ -268,17 +268,27 @@ public class CountSyncManager {
                     dbHelper.markSessionSynced(session.getSessionId());
                 }
 
-                // Compute any remaining unsynced counts across all local sessions so in-flight taps are preserved accurately
-                long unsyncedRemainingDelta = 0;
+                // FIX #2: Separately compute remaining unsynced delta for total vs today.
+                // After 1-2 days offline, the DB may contain sessions from multiple days.
+                // Adding ALL unsynced deltas to correctedToday would inflate today's count
+                // with counts from previous days. Only today's sessions should go into correctedToday.
+                long unsyncedTotalDelta = 0;
+                long unsyncedTodayDelta = 0;
+                String todayDateStr = PreferencesManager.getTodayDateString();
                 if (!currentUserId.isEmpty()) {
                     List<RecitationSession> remainingSessions = dbHelper.getUnsyncedSessions(currentUserId);
                     for (RecitationSession rs : remainingSessions) {
-                        unsyncedRemainingDelta += rs.getUnsyncedDelta();
+                        long delta = rs.getUnsyncedDelta();
+                        unsyncedTotalDelta += delta;
+                        // Only count delta toward today if the session belongs to today
+                        if (todayDateStr.equals(rs.getDate())) {
+                            unsyncedTodayDelta += delta;
+                        }
                     }
                 }
 
-                long correctedTotal = updatedTotal + unsyncedRemainingDelta;
-                long correctedToday = updatedToday + unsyncedRemainingDelta;
+                long correctedTotal = updatedTotal + unsyncedTotalDelta;
+                long correctedToday = updatedToday + unsyncedTodayDelta;
                 prefsManager.updateRemoteSyncedTotals(correctedTotal, correctedToday);
 
                 // Proceed to next unsynced session
